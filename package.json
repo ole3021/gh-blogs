@@ -1,0 +1,12 @@
+{
+  "name": "ghp-blogs",
+  "version": "0.0.1",
+  "description": "The lib for easily build blogs with Github Pages",
+  "main": "./lib/index.js",
+  "repository": "git@github.com:ole3021/ghp-blogs.git",
+  "author": "Oliver.W <ole3021@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "pouchdb": "^6.4.3"
+  }
+}
