@@ -7,6 +7,12 @@
   "author": "Oliver.W <ole3021@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "pouchdb": "^6.4.3"
+    "@octokit/rest": "^15.8.0",
+    "moh-error": "^1.1.0",
+    "pouchdb": "^6.4.3",
+    "pouchdb-load": "^1.4.6"
+  },
+  "devDependencies": {
+    "jest": "^23.0.1"
   }
 }
