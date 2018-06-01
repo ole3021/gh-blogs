@@ -1,5 +1,5 @@
 ---
-Author: Oliver.W
+author: Oliver.W
 ---
 
 # Micro Service with Node.js

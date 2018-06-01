@@ -1,5 +1,5 @@
 ---
-Author: Oliver.W
+author: Oliver.W
 ---
 
 # About
