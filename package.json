@@ -7,7 +7,7 @@
   "author": "Oliver.W <ole3021@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest --forceExit",
+    "test": "jest --forceExit --detectOpenHandles",
     "test-cov": "jest --coverage --forceExit",
     "watch": "jest --watchAll"
   },
@@ -16,9 +16,6 @@
     "lokijs": "^1.5.5",
     "marked": "^0.4.0",
     "moh-error": "^1.1.0",
-    "pouchdb": "^6.4.3",
-    "pouchdb-adapter-memory": "^6.4.3",
-    "pouchdb-load": "^1.4.6",
     "shorthash": "^0.0.2",
     "yaml-front-matter": "^4.0.0"
   },
@@ -26,6 +23,10 @@
     "debug": "^3.1.0",
     "jest": "^23.0.1"
   },
+  "watchPathIgnorePatterns": [
+    "./test/fixture/db.json~",
+    "./test/fixture/db.json"
+  ],
   "prettier": {
     "singleQuote": true,
     "arrowParens": "always"
