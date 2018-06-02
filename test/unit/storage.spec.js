@@ -4,6 +4,7 @@ const { loadBlogs, generateIndex } = require('../../lib/utils');
 const BlogDB = require('../../lib/storage');
 
 const blogPath = path.join(__dirname, '../fixture/blogs');
+const testPath = path.join(__dirname, '../fixture/db/test.db');
 const dbPath = path.join(__dirname, '../fixture/db/testDB.db');
 
 let blogIndex = null;
@@ -63,10 +64,23 @@ test('storage can save to file', async () => {
 });
 
 test('storage can load from file', async () => {
-  const blogDB2 = new BlogDB(path.join(__dirname, '../fixture/db/test.json'));
+  const blogDB2 = new BlogDB(testPath);
 
   await blogDB2.loadFile();
   const blogs = blogDB.getAll();
+
+  expect(blogs.length).toEqual(3);
+  expect(blogs[0]._id).toEqual(blogIndex[0]._id);
+  expect(blogs[1]._id).toEqual(blogIndex[1]._id);
+  expect(blogs[2]._id).toEqual(blogIndex[2]._id);
+});
+
+test('storage can load from JSON', () => {
+  const content = JSON.parse(fs.readFileSync(testPath));
+
+  const blogDB3 = new BlogDB();
+  blogDB3.loadJSON(content);
+  const blogs = blogDB3.getAll();
 
   expect(blogs.length).toEqual(3);
   expect(blogs[0]._id).toEqual(blogIndex[0]._id);
