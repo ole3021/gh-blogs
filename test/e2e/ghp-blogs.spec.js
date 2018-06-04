@@ -18,7 +18,7 @@ describe('GHBlogs', () => {
   });
 
   it('should can create instance with correct props', () => {
-    expect(myBlogs.host).toEqual('ole3021.me');
+    expect(myBlogs.repo).toEqual('ole3021.me');
     expect(myBlogs.folderPath).toEqual(folderPath);
     expect(myBlogs.indexFile).toEqual(dbPath);
   });

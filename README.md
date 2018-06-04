@@ -2,7 +2,24 @@
 
 The lib for build blogs with github pages easily.
 
+## Motivation
+
+* Free Storage
+* Yaml favoured Markdown
+* Comfort to working with Github flows
+* Online Editor
+  * easily fix problems
+  * easily view
+  * easily modify
+
 ## Features
+
+* Use repo as blogs
+* Use repo as storage for blogs
+* Generate blog index and save as file in repo
+* Blog content can be modified without re-generate index or re-build
+* One command to update index(meta info)
+* [ ] save user commends on issues
 
 ### Init the lib
 
