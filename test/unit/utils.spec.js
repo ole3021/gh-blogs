@@ -1,18 +1,18 @@
 const path = require('path');
-const { loadBlogs, generateIndex } = require('../../lib/utils');
+const { loadBlogs, generateMetaInfo } = require('../../lib/utils');
 
-const blogPath = path.join(__dirname, '../fixture/blogs');
-let blogFolder = null;
+const blogFolderPath = path.join(process.cwd(), './test/fixture/blogs');
+let blogsInfo = null;
 test('load blogs can generate the folder info', () => {
-  blogFolder = loadBlogs(blogPath);
+  blogsInfo = loadBlogs(blogFolderPath);
 
-  expect(blogFolder.length).toEqual(3);
-  expect(blogFolder[1].dir).toEqual('/javascript');
-  expect(blogFolder[1].name).toEqual('micro service with node.js');
+  expect(blogsInfo.length).toEqual(3);
+  expect(blogsInfo[1].dir).toEqual('/javascript');
+  expect(blogsInfo[1].name).toEqual('micro service with node.js');
 });
 
 test('generate blog infos', () => {
-  const result = generateIndex(blogFolder, blogPath);
+  const result = generateMetaInfo(blogsInfo, blogFolderPath);
 
   expect(result.length).toEqual(3);
   expect(result[0].meta.author).toEqual('Oliver.W');
