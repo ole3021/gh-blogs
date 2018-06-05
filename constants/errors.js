@@ -1,6 +1,9 @@
 module.exports = {
-  MISSING_HOST_OR_BLOG_PATH: {
-    message: 'The host or the blogPath are quired.'
+  MISSING_REPO: {
+    message: 'Missint repo info to init.'
+  },
+  MISSING_OPTIONS: {
+    message: 'Missint options info to init.'
   },
   BLOG_FOLDER_NOT_EXIST: {
     message: 'The path of blog folder is not exist.'

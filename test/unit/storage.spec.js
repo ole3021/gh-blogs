@@ -1,21 +1,22 @@
 const fs = require('fs');
 const path = require('path');
-const { loadBlogs, generateIndex } = require('../../lib/utils');
-const BlogDB = require('../../lib/storage');
+const { loadBlogs, generateMetaInfo } = require('../../lib/utils');
+const Storage = require('../../lib/storage');
 
-const blogPath = path.join(__dirname, '../fixture/blogs');
-const testPath = path.join(__dirname, '../fixture/db/test.db');
-const dbPath = path.join(__dirname, '../fixture/db/testDB.db');
+const blogPath = path.join(process.cwd(), './test/fixture/blogs');
+const testPath = path.join(process.cwd(), './test/fixture/db/test.db');
+const dbPath = path.join(process.cwd(), './test/fixture/db/testDB.db');
 
 let blogIndex = null;
-let blogDB = null;
+let blogStorage = null;
 
 beforeAll(async () => {
   if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath);
-  const blogFolder = loadBlogs(blogPath);
-  blogIndex = generateIndex(blogFolder, blogPath);
-  blogDB = new BlogDB(dbPath);
-  await blogDB.loadFile();
+  const blogsInfo = loadBlogs(blogPath);
+  blogIndex = generateMetaInfo(blogsInfo, blogPath);
+
+  blogStorage = new Storage(dbPath, { folder: blogPath, dbFile: dbPath });
+  await blogStorage.loadFile();
 });
 
 afterAll(() => {
@@ -23,7 +24,7 @@ afterAll(() => {
 });
 
 test('storage can save docs', () => {
-  const result = blogDB.updateIndex(blogIndex);
+  const result = blogStorage.updateMeta(blogIndex);
 
   expect(result.length).toEqual(3);
   expect(result[0]._id).toEqual(blogIndex[0]._id);
@@ -32,7 +33,7 @@ test('storage can save docs', () => {
 });
 
 test('storage can get all docs', () => {
-  const result = blogDB.getAll();
+  const result = blogStorage.getAll();
 
   expect(result.length).toEqual(3);
   expect(result[0]._id).toEqual(blogIndex[0]._id);
@@ -41,14 +42,14 @@ test('storage can get all docs', () => {
 });
 
 test('storage can find one item by id', () => {
-  const result = blogDB.getBlogById(blogIndex[1]._id);
+  const result = blogStorage.get(blogIndex[1]._id);
 
   expect(result.length).toEqual(1);
   expect(result[0]).toEqual(blogIndex[1]);
 });
 
 test('storage can get all collects', () => {
-  const result = blogDB.getCollections();
+  const result = blogStorage.getCollections();
 
   expect(result[0].name).toEqual('blogs');
   expect(result[0].count).toEqual(3);
@@ -56,7 +57,7 @@ test('storage can get all collects', () => {
 
 test('storage can save to file', async () => {
   const beforeState = fs.existsSync(dbPath);
-  await blogDB.dumpFile();
+  await blogStorage.dumpFile();
   const laterState = fs.existsSync(dbPath);
 
   expect(beforeState).toBe(false);
@@ -64,10 +65,10 @@ test('storage can save to file', async () => {
 });
 
 test('storage can load from file', async () => {
-  const blogDB2 = new BlogDB(testPath);
+  const blogStorage2 = new Storage(testPath);
 
-  await blogDB2.loadFile();
-  const blogs = blogDB.getAll();
+  await blogStorage2.loadFile();
+  const blogs = blogStorage.getAll();
 
   expect(blogs.length).toEqual(3);
   expect(blogs[0]._id).toEqual(blogIndex[0]._id);
@@ -78,9 +79,9 @@ test('storage can load from file', async () => {
 test('storage can load from JSON', () => {
   const content = JSON.parse(fs.readFileSync(testPath));
 
-  const blogDB3 = new BlogDB();
-  blogDB3.loadJSON(content);
-  const blogs = blogDB3.getAll();
+  const blogStorage3 = new Storage();
+  blogStorage3.loadJSON(content);
+  const blogs = blogStorage3.getAll();
 
   expect(blogs.length).toEqual(3);
   expect(blogs[0]._id).toEqual(blogIndex[0]._id);
