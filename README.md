@@ -56,7 +56,7 @@ const dumpFile = async () => {
   } catch(err => console.log('>>> Faild to generate index', err))
 }
 
-await dumpFile()
+dumpFile()
 ```
 
 2.  add all the files and commit to the master branch of the repo.
@@ -75,11 +75,12 @@ const options = {
 };
 
 const myBlogs = new GHBlogs(blogRepo, options);
+const init = async () => {
+  await myBlogs.loadRemote(); // will load data from the repo remotely
 
-await myBlogs.init() // will load data from the repo remotely
-
-const allBlogMetaInfo = myBlogs.getAll()
-const aBlog = myBlogs.get('The id in the meta info')
+  const allBlogMetaInfo = myBlogs.getAll();
+  const aBlog = myBlogs.get('The _id in the meta info');
+};
 ```
 
 ### Details
