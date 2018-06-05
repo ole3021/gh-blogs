@@ -35,28 +35,30 @@ Generate the blogs index based on the Github YAML favoured Markedown file, and s
 
 > Blogs should be nested in any level under the blog folder, all the nested will be take as the categories of the blogs.
 
-1.  create a script `ghBlogs.js` at the root fo the repo folder as the script to do the work.
+1.  create a script [`build.js`](https://github.com/ole3021/blogs/blob/master/build.js) at the root fo the repo folder as the script to do the work.
 
 ```js
-// ghBlogs.js
-const GHBlogs = require('gh-blogs');
+// build.js
+const GHBlog = require('gh-blogs');
 
 const blogRepo = 'https://github.com/ole3021/blogs';
 const options = {
   folder: './blogs', // path for the blogs folder
-  dbFile: './blogs.db', // file path for the db file
+  dbFile: './blogs.db' // file path for the db file
 };
 
-const myBlogs = new GHBlogs(blogRepo, options);
+const myBlogs = new GHBlog(blogRepo, options);
 
 const dumpFile = async () => {
   try {
-    await myBlogs.dumpFile()
-    console.log('>>> Generate successfully.')
-  } catch(err => console.log('>>> Faild to generate index', err))
-}
+    await myBlogs.dumpFile();
+    console.log('>>> Generate successfully.');
+  } catch (error) {
+    console.log('>>> Faild to generate index', error);
+  }
+};
 
-dumpFile()
+dumpFile();
 ```
 
 2.  add all the files and commit to the master branch of the repo.

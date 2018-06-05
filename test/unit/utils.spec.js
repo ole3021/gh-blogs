@@ -18,7 +18,4 @@ test('generate blog infos', () => {
   expect(result[0].meta.author).toEqual('Oliver.W');
   expect(result[1].meta.author).toEqual('Oliver.W');
   expect(result[2].meta.author).toEqual('Oliver.W');
-  expect(result[0].content).toBeDefined();
-  expect(result[1].content).toBeDefined();
-  expect(result[2].content).toBeDefined();
 });
