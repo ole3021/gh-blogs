@@ -17,6 +17,8 @@
     "lokijs": "^1.5.5",
     "marked": "^0.4.0",
     "moh-error": "^1.1.0",
+    "pouchdb": "^7.0.0",
+    "pouchdb-replication-stream": "^1.2.9",
     "shorthash": "^0.0.2",
     "yaml-front-matter": "^4.0.0"
   },
