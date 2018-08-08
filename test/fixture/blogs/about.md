@@ -1,5 +1,0 @@
----
-author: Oliver.W
----
-
-# About
