@@ -7,24 +7,77 @@
   "author": "Oliver.W <ole3021@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest --forceExit --detectOpenHandles",
-    "test-cov": "jest --coverage --forceExit",
-    "watch": "jest --watchAll"
+    "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
+    "prebuild": "rimraf dist",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "start": "rollup -c rollup.config.ts -w",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
+    "deploy-docs": "ts-node tools/gh-pages-publish",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release",
+    "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
+    "precommit": "lint-staged"
   },
   "dependencies": {
-    "@octokit/rest": "^15.8.0",
     "axios": "^0.18.0",
-    "lokijs": "^1.5.5",
     "marked": "^0.4.0",
     "moh-error": "^1.1.0",
+    "pouchdb": "^7.0.0",
     "shorthash": "^0.0.2",
     "yaml-front-matter": "^4.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "@types/node": "^10.5.7",
+    "@types/pouchdb": "^6.3.2",
     "debug": "^3.1.0",
-    "jest": "^23.0.1"
+    "jest": "^23.4.2",
+    "lodash.camelcase": "^4.3.0",
+    "prettier": "^1.14.0",
+    "rollup": "^0.64.1",
+    "rollup-plugin-commonjs": "^9.1.4",
+    "rollup-plugin-json": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript3": "^1.0.0",
+    "ts-jest": "^23.1.3",
+    "ts-node": "^7.0.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.14.0",
+    "tslint-config-standard": "^7.1.0",
+    "typescript": "^3.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/",
+      "/rollup.config.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 60,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
+    "collectCoverage": true
   },
   "prettier": {
+    "semi": false,
     "singleQuote": true,
     "arrowParens": "always"
   }
