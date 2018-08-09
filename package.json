@@ -19,8 +19,7 @@
     "commit": "git-cz",
     "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
-    "precommit": "lint-staged",
-    "postinstall": "ts-node tools/init"
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -69,10 +68,10 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 90,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
+        "branches": 60,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
       }
     },
     "collectCoverage": true

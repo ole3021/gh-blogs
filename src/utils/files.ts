@@ -11,23 +11,33 @@ export const checkIsExist = (pathLike: fs.PathLike): Boolean =>
   fs.existsSync(pathLike)
 export const checkIsDirectory = (pathLike: fs.PathLike): Boolean =>
   fs.lstatSync(pathLike).isDirectory()
+export const saveToFile = (pathLike: fs.PathLike, content: string): void => {
+  // TODO: If folder not exist create folder.
+  fs.writeFileSync(pathLike, content, 'utf8')
+}
+export const deleteFile = (pathLike: fs.PathLike): void => {
+  if (checkIsExist(pathLike)) fs.unlinkSync(pathLike)
+}
 
 export interface IFileInfo {
-  folder: String
-  file: String
-  name: String
-  ext: String
+  folder: string
+  file: string
+  name: string
+  ext: string
   createdAt: Date
   updatedAt: Date
-  size: Number
-  mode: Number
+  size: number
+  mode: number
 }
 
 export const getDirFileInfo = (
   pathLike: fs.PathLike,
   root: fs.PathLike = pathLike
 ): IFileInfo[] | string[] => {
-  return fs.readdirSync(pathLike).reduce((allItems: any[] /* TOFIX: Add Type */, name: string) => {
+  return fs.readdirSync(pathLike).reduce((
+    allItems: any[] /* TOFIX: Add Type */,
+    name: string
+  ) => {
     const itemPath = path.join(pathLike as string, name)
     if (checkIsDirectory(itemPath)) {
       return allItems.concat(getDirFileInfo(itemPath, root) as string[])

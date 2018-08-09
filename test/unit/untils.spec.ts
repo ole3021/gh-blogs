@@ -6,6 +6,9 @@ import {
   checkIsExist,
   checkIsDirectory,
   getDirFileInfo,
+  saveToFile,
+  deleteFile,
+  hashString,
   IFileInfo
 } from '../../src/utils'
 
@@ -52,18 +55,53 @@ test('Check if folder is dictory', () => {
   expect(articleFolder).toBe(false)
 })
 
+test('Save content to file', () => {
+  const testContent = `aaaa`
+  const rootPath = getRootPath()
+  const targetPath = path.join(
+    rootPath,
+    'test',
+    'fixture',
+    '.ghblogs',
+    '.blogIndex'
+  )
+  deleteFile(targetPath)
+  const isPreExist = checkIsExist(targetPath)
+
+  saveToFile(targetPath, testContent)
+
+  const isPosExist = checkIsExist(targetPath)
+
+  expect(isPreExist).toBe(false)
+  expect(isPosExist).toBe(true)
+  deleteFile(targetPath)
+})
+
 test('Get directories info', () => {
   const rootPath = getRootPath()
   const fixturePath = path.join(rootPath, 'test', 'fixture')
   const fileInfo = getDirFileInfo(fixturePath) as IFileInfo[]
 
-  expect(fileInfo.length).toBe(4)
-  expect(fileInfo[0].file).toBe('about.md')
-  expect(fileInfo[0].ext).toBe('.md')
-  expect(fileInfo[0].name).toBe('about')
-  expect(fileInfo[0].folder).toBe('/')
-  expect(fileInfo[2].file).toBe('js tips.md')
-  expect(fileInfo[2].ext).toBe('.md')
-  expect(fileInfo[2].name).toBe('js tips')
-  expect(fileInfo[2].folder).toBe('/javascript/tips')
+  expect(fileInfo.length).toBe(5)
+
+  const aboutInfo = fileInfo.find((info) => info.name === 'about')
+  const jsTipInfo = fileInfo.find((info) => info.name === 'js tips')
+  expect(aboutInfo.file).toBe('about.md')
+  expect(aboutInfo.ext).toBe('.md')
+  expect(aboutInfo.name).toBe('about')
+  expect(aboutInfo.folder).toBe('/')
+  expect(jsTipInfo.file).toBe('js tips.md')
+  expect(jsTipInfo.ext).toBe('.md')
+  expect(jsTipInfo.name).toBe('js tips')
+  expect(jsTipInfo.folder).toBe('/javascript/tips')
+})
+
+test('Hash any strings', () => {
+  const hashedResult1 = hashString('/Javascript/Async Await.md')
+  const hashedResult2 = hashString('/Software Engineering/设计思想.md')
+  const hashedResult3 = hashString('/Design/设计&Sketch.md')
+
+  expect(hashedResult1).toBe('21iel2')
+  expect(hashedResult2).toBe('zmPMa')
+  expect(hashedResult3).toBe('ZIi3Ds')
 })

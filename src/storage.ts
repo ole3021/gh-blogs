@@ -1,19 +1,18 @@
-'use strct'
+'use strict'
 
-import { checkInBrowser } from './utils'
-const isInBrowser = checkInBrowser()
-
-import PouchDB from 'pouchdb';
+import * as path from 'path'
+import { saveToFile, getRootPath } from './utils'
+import { IBlog } from './blog'
 
 interface IStorageModule {
-    build(rootPath?: string): Promise<Boolean>
-    // load(dbPath: string): Promise<Boolean>
-    // getAll(): Promise<Object[]>
-    // get(id: string): Promise<Object>
+  build(blogs: IBlog[]): void
 }
 
 export default class Storage implements IStorageModule {
-    async build(rootPath?: string): Promise<Boolean> {
-        return true
-    }
+  constructor(private fileName: string = '.GHBlogs') {}
+
+  build(blogs: IBlog[]): void {
+    const rootPath = getRootPath()
+    saveToFile(path.join(rootPath, this.fileName), JSON.stringify(blogs))
+  }
 }
