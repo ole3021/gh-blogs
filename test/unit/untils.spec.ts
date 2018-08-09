@@ -5,12 +5,14 @@ import {
   getStats,
   checkIsExist,
   checkIsDirectory,
-  getDirFileInfo,
+  getAllDirs,
+  getAllFiles,
   saveToFile,
   deleteFile,
   hashString,
-  IFileInfo
 } from '../../src/utils'
+
+import { IFileInfo } from '../../src/interfaces'
 
 test('Check is not browser environment', () => {
   const isInBrowser = checkInBrowser()
@@ -77,10 +79,23 @@ test('Save content to file', () => {
   deleteFile(targetPath)
 })
 
+test('Get all directories info', () => {
+  const rootPath = getRootPath()
+  const fixturePath: string = path.join(rootPath, 'test', 'fixture')
+
+  const allDirs = getAllDirs(fixturePath)
+  const excludeDirs = getAllDirs(fixturePath, ['.ghblogs'])
+
+  expect(allDirs.length).toBe(4)
+  expect(allDirs[0].includes('.ghblogs')).toBeTruthy()
+  expect(excludeDirs.length).toBe(3)
+  expect(excludeDirs[0].includes('.ghblogs')).toBeFalsy()
+})
+
 test('Get directories info', () => {
   const rootPath = getRootPath()
   const fixturePath = path.join(rootPath, 'test', 'fixture')
-  const fileInfo = getDirFileInfo(fixturePath) as IFileInfo[]
+  const fileInfo = getAllFiles(fixturePath) as IFileInfo[]
 
   expect(fileInfo.length).toBe(5)
 

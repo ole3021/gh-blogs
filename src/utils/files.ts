@@ -2,6 +2,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
+import { IFileInfo } from '../interfaces'
 
 export const getRootPath = (): string =>
   path.join(path.resolve(__dirname), '../..')
@@ -19,43 +20,61 @@ export const deleteFile = (pathLike: fs.PathLike): void => {
   if (checkIsExist(pathLike)) fs.unlinkSync(pathLike)
 }
 
-export interface IFileInfo {
-  folder: string
-  file: string
-  name: string
-  ext: string
-  createdAt: Date
-  updatedAt: Date
-  size: number
-  mode: number
-}
-
-export const getDirFileInfo = (
-  pathLike: fs.PathLike,
-  root: fs.PathLike = pathLike
-): IFileInfo[] | string[] => {
-  return fs.readdirSync(pathLike).reduce((
-    allItems: any[] /* TOFIX: Add Type */,
+export const getAllDirs = (folderPath: string, excludeFolders: string[] = [], root: string = folderPath): string[] => {
+  return fs.readdirSync(folderPath).reduce((
+    allDirs: string[],
     name: string
   ) => {
-    const itemPath = path.join(pathLike as string, name)
-    if (checkIsDirectory(itemPath)) {
-      return allItems.concat(getDirFileInfo(itemPath, root) as string[])
+    const itemPath = path.join(folderPath, name)
+    if (checkIsDirectory(itemPath) && !excludeFolders.includes(name)) {
+      allDirs = allDirs.concat([itemPath])
+      return allDirs.concat(getAllDirs(itemPath, excludeFolders, root))
     }
-
-    const parsedPath = path.parse(itemPath.replace(root as string, ''))
-    const stats = fs.statSync(itemPath)
-
-    const info: IFileInfo = {
-      folder: path.join(parsedPath.root, parsedPath.dir),
-      file: `${parsedPath.name}${parsedPath.ext}`,
-      name: parsedPath.name,
-      ext: parsedPath.ext,
-      createdAt: stats.birthtime,
-      updatedAt: stats.mtime,
-      size: stats.size,
-      mode: stats.mode
-    }
-    return allItems.concat([info])
+    return allDirs
   }, [])
 }
+
+export const getFiles = (folderPath: string, exts: string[] = []): IFileInfo[] => {
+  return fs.readdirSync(folderPath).reduce((
+    allInfo: IFileInfo[],
+    name: string
+  ) => {
+    const itemPath = path.join(folderPath, name)
+
+    if (!checkIsDirectory(itemPath) && (exts.length === 0 || exts.includes(name.split('.')[1]))) {
+      const parsedPath = path.parse(itemPath.replace(folderPath, ''))
+      const stats = fs.statSync(itemPath)
+
+      const info: IFileInfo = {
+        folder: path.join(parsedPath.root, parsedPath.dir),
+        file: `${parsedPath.name}${parsedPath.ext}`,
+        name: parsedPath.name,
+        ext: parsedPath.ext,
+        createdAt: stats.birthtime,
+        updatedAt: stats.mtime,
+        size: stats.size,
+        mode: stats.mode
+      }
+      return allInfo.concat([info])
+    }
+    return allInfo
+  }, [])
+}
+
+export const getAllFiles = (
+  folderPath: string,
+  excludeFolders: string[] = [],
+  exts: string[] = [],
+  root: string = folderPath
+): IFileInfo[] => {
+  let fileInfo: IFileInfo[] = []
+  const folders = [folderPath].concat(getAllDirs(folderPath, excludeFolders, root))
+  for (const folder of folders) {
+    const basePath = folder.replace(folderPath, '')
+
+    fileInfo = fileInfo.concat(getFiles(folder, exts).map(item => Object.assign(item, { folder: basePath || '/' })))
+  }
+
+  return fileInfo
+}
+

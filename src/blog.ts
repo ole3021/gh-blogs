@@ -1,25 +1,10 @@
 'use strict'
 
-import { IFileInfo } from './utils/files'
+import { IFileInfo, IBlog, IBlogFile } from './interfaces'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as yamlFront from 'yaml-front-matter'
 import { getRootPath, hashString } from './utils'
-
-export interface IBlog {
-  id: string
-  path: string
-  title: string
-  createdAt: Date
-  updatedAt: Date
-  size: number
-  meta: object
-}
-
-interface IBlogFile {
-  title: string
-  meta: object
-}
 
 interface IBlogModule {
   loadBlogFile(blogPath: string): IBlogFile

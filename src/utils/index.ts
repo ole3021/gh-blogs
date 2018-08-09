@@ -9,8 +9,8 @@ export {
   checkIsDirectory,
   saveToFile,
   deleteFile,
-  getDirFileInfo,
-  IFileInfo
+  getAllDirs,
+  getAllFiles
 } from './files'
 
 export const checkInBrowser = (): boolean => typeof window === 'object'
