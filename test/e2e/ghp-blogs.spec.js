@@ -10,7 +10,7 @@ describe('GHBlogs', () => {
 
   const myBlogs = new GHBlogs(repo, {
     folder: folderPath,
-    dbFile: dbPath
+    dbFile: dbPath,
   });
 
   beforeAll(() => {
@@ -31,6 +31,7 @@ describe('GHBlogs', () => {
     try {
       const myBlogs = new GHBlogs();
     } catch (error) {
+      console.log('>>> err', error, error.message);
       expect(error.message).toEqual('Missint repo info to init.');
     }
   });
@@ -48,7 +49,7 @@ describe('GHBlogs', () => {
     const content = JSON.parse(fs.readFileSync(testPath));
     const anotherBlogs = new GHBlogs('https://github.com/ole3021/ghp-blogs', {
       folder: folderPath,
-      dbFile: './test/fixture/db/test.db'
+      dbFile: './test/fixture/db/test.db',
     });
 
     await anotherBlogs.loadRemote();

@@ -16,7 +16,6 @@
     "axios": "^0.18.0",
     "lokijs": "^1.5.5",
     "marked": "^0.4.0",
-    "moh-error": "^1.1.0",
     "shorthash": "^0.0.2",
     "yaml-front-matter": "^4.0.0"
   },
