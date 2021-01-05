@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^15.8.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "lokijs": "^1.5.5",
     "marked": "^0.4.0",
     "shorthash": "^0.0.2",
